@@ -3,6 +3,7 @@ import sys
 import unittest
 from pathlib import Path
 
+
 class TestScraping(unittest.TestCase):
 
     def setUp(self) -> None:

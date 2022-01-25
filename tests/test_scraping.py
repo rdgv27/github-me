@@ -12,14 +12,12 @@ class TestScraping(unittest.TestCase):
             os.path.join(Path(__file__).parent.parent.resolve(), 'src')
         )
 
-    def test_request_profile(self) -> None:
+    def test_get_events_from_api(self) -> None:
 
-        from scraping import request_profile
+        from scraping import get_events_from_api
 
-        # Given
         user = 'rdgv27'
-
-        self.assertEqual(request_profile(user), user)
+        self.assertEqual(get_events_from_api(user), 200)
 
 
 if __name__ == '__main__':

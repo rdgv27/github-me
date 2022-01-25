@@ -2,11 +2,13 @@ import requests
 
 
 def get_events_from_api(user: str) -> str:
+    """Acessa a api do github e filtra apenas os eventos de Push e Create"""
 
-    # Verificar se é possível pegar as informações através da API de eventos
     # https://docs.github.com/en/rest/reference/activity#events
 
     # url_profile = f'https://github.com/{user}/'
+
+    # Verificar como fazer a autenticação para pegar os eventos privados
 
     url_api = f'https://api.github.com/users/{user}/events'
 
@@ -19,6 +21,8 @@ def get_events_from_api(user: str) -> str:
         event
         for event in r.json()
         if event["type"] in ['PushEvent', 'CreateEvent']
-    ]
+    ]  # Verificar quais outros tipos de evento podem ser considerados (Fork, branch, pull request?)
+
+    # Para cada evento transformar a data event["created_at"] em um objeto datetime
 
     return r.status_code

@@ -1,4 +1,7 @@
+import os
 import requests
+
+from utils import load_json, save_json
 
 
 def get_events_from_api(user: str) -> str:
@@ -8,13 +11,16 @@ def get_events_from_api(user: str) -> str:
 
     # url_profile = f'https://github.com/{user}/'
 
-    # Verificar como fazer a autenticação para pegar os eventos privados
-
     url_api = f'https://api.github.com/users/{user}/events'
+
+    token = load_json(os.path.join('data', 'git_token.json'))['token']
 
     r = requests.get(
         url_api,
-        headers={'accept': 'application/vnd.github.v3+json'}
+        headers={
+            'Authorization': f'token {token}',
+            'accept': 'application/vnd.github.v3+json'
+        }
     )
 
     data = [

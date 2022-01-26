@@ -1,7 +1,9 @@
 import os
 import requests
+from datetime import timezone
+from datetime import datetime
 
-from utils import load_json, save_json
+from utils import load_json
 
 
 def get_events_from_api(user: str) -> str:
@@ -10,6 +12,8 @@ def get_events_from_api(user: str) -> str:
     # https://docs.github.com/en/rest/reference/activity#events
 
     # url_profile = f'https://github.com/{user}/'
+
+    EVENT_TYPES = ['PushEvent', 'CreateEvent', 'PullRequestEvent', 'ForkEvent']
 
     url_api = f'https://api.github.com/users/{user}/events'
 
@@ -26,9 +30,10 @@ def get_events_from_api(user: str) -> str:
     data = [
         event
         for event in r.json()
-        if event["type"] in ['PushEvent', 'CreateEvent']
-    ]  # Verificar quais outros tipos de evento podem ser considerados (Fork, branch, pull request?)
+        if event["type"] in EVENT_TYPES
+    ]
 
-    # Para cada evento transformar a data event["created_at"] em um objeto datetime
+    for event in data:
+        event['created_at'] = datetime.fromisoformat(event['created_at'][:-1]).astimezone(timezone.utc)
 
     return r.status_code
